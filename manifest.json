@@ -1,10 +1,10 @@
 {
     "name": "Lyrics",
     "version": "1.0.0",
-    "description": "Lyrics plugin for Powercord, supports the pc-spotify plugin!",
+    "description": "Lyrics plugin for Powercord, supports searching and the pc-spotify plugin!",
     "author": "ohlookitsderpy",
     "license": "MIT",
-    "repo": "https://github.com/ohlookitsderpy/lyrics",
+    "repo": "https://github.com/powercord-community/lyrics",
     "dependencies": [
       "pc-commands",
       "pc-spotify"
