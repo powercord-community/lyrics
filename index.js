@@ -36,11 +36,4 @@ module.exports = class Lyrics extends Plugin {
         }
       });
   }
-
-  pluginWillUnload () {
-    powercord
-      .pluginManager
-      .get('pc-commands')
-      .unregister('lyrics');
-  }
 };
