@@ -8,5 +8,8 @@
     "dependencies": [
       "pc-commands",
       "pc-spotify"
+    ],
+    "permissions": [ 
+        "ext_api" 
     ]
 }
