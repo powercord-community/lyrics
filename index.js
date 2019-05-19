@@ -10,7 +10,7 @@ module.exports = class Lyrics extends Plugin {
       [],
       'Send lyrics to a specific song or the current song in chat!',
       'lyrics <song || ???>',
-      async ([args ]) => {
+      async ([ args ]) => {
         try {
           let data = await get(`https://ksoft.derpyenterprises.org/lyrics?input=${args || SpotifyPlayer.player.item.name + SpotifyPlayer.player.item.artists[0].name}`).then(res => res.body);
           if (!data.data[0].lyrics) {
@@ -32,7 +32,11 @@ module.exports = class Lyrics extends Plugin {
             { content: `\`\`\`${value}\`\`\`` }
           );
         } catch (e) {
-          // UNESCAPED_CHARACTERS err
+          console.log(e);
+          return {
+            send: false,
+            result: 'Yikes, I couldn\'t find that song due to an error. Please check the Discord developer tools console! (ctrl + shift + i)'
+          };
         }
       });
   }
