@@ -52,4 +52,4 @@ From dust
 
 Lyrics provided by KSoft.Si | © Imagine Dragons 2014
 ```
-Privacy Notice: I don't track any requests going into ``ksoft.derpyenterprises.org``, but you should read the privacy policy for KSoft [here](https://api.ksoft.si/terms-and-privacy). 
+Privacy Notice: I don't track any requests going into ``lyrics-api.powercord.dev``, but you should read the privacy policy for KSoft [here](https://api.ksoft.si/terms-and-privacy). You can also view the code for my server [here](https://gitlab.com/ohlookitsderpy/lyrics-api).
