@@ -27,7 +27,6 @@ module.exports = class Lyrics extends Plugin {
           } else {
             data = await get(`https://lyrics-api.powercord.dev/lyrics?input=${args}`).then(res => JSON.parse(res.body));
           }
-          console.log(data);
           if (!data.data[0].lyrics) {
             return {
               send: false,
