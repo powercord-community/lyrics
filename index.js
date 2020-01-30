@@ -22,12 +22,16 @@ module.exports = class Lyrics extends Plugin {
         try {
           // Get data...
           let data;
-          if (SpotifyPlayer) data = await get(`https://lyrics-api.powercord.dev/lyrics?input=${args || SpotifyPlayer.player.item.name + SpotifyPlayer.player.item.artists[0].name}`).then(res => res.body);
-          else data = await get(`https://lyrics-api.powercord.dev/lyrics?input=${args}`).then(res => res.body);
+          if (SpotifyPlayer) {
+            data = await get(`https://lyrics-api.powercord.dev/lyrics?input=${args || SpotifyPlayer.player.item.name + SpotifyPlayer.player.item.artists[0].name}`).then(res => JSON.parse(res.body));
+          } else {
+            data = await get(`https://lyrics-api.powercord.dev/lyrics?input=${args}`).then(res => JSON.parse(res.body));
+          }
+          console.log(data);
           if (!data.data[0].lyrics) {
             return {
               send: false,
-              result: 'Yikes, I couldn\'t find that song!'
+              result: 'I couldn\'t find that song!'
             };
           }
           data = `${data.data[0].artist} - ${data.data[0].name}\n\n${data.data[0].lyrics}\n\nLyrics provided by KSoft.Si | © ${data.data[0].artist} ${data.data[0].album_year}`;
@@ -47,7 +51,7 @@ module.exports = class Lyrics extends Plugin {
           console.log(e);
           return {
             send: false,
-            result: 'Yikes, I couldn\'t find that song due to an error. Please check the Discord developer tools console! (ctrl + shift + i)'
+            result: 'Yikes, I couldn\'t find that song due to an error. Please check the Discord developer tools console! (Ctrl + Shift + I)'
           };
         }
       });
