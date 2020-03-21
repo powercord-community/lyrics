@@ -37,10 +37,11 @@ module.exports = class Lyrics extends Plugin {
           const value = data.replace(/(?:\\[rn])+/g, '');
           // ...then send it
           if (value.length > 2000) { // Send to user if it's over 2000 characters
-            return {
-              send: false,
-              result: `\`\`\`${value}\`\`\``
-            };
+            messages.sendMessage(
+              channels.getChannelId(),
+              { content: data.data[0].url }
+            );
+            return
           }
           messages.sendMessage(
             channels.getChannelId(),
