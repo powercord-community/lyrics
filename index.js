@@ -25,6 +25,12 @@ module.exports = class Lyrics extends Plugin {
           if (SpotifyPlayer) {
             data = await get(`https://lyrics-api.powercord.dev/lyrics?input=${args || SpotifyPlayer.player.item.name + SpotifyPlayer.player.item.artists[0].name}`).then(res => JSON.parse(res.body));
           } else {
+            if (!args) {
+              return {
+                send: false,
+                result: 'Provide args!'
+              };
+            }
             data = await get(`https://lyrics-api.powercord.dev/lyrics?input=${args}`).then(res => JSON.parse(res.body));
           }
           if (!data.data[0].lyrics) {
