@@ -1,6 +1,6 @@
 const { get } = require('powercord/http');
 const { Plugin } = require('powercord/entities');
-const { messages, channels, spotifySocket } = require('powercord/webpack');
+const { spotifySocket } = require('powercord/webpack');
 
 class Lyrics extends Plugin {
     startPlugin() {
