@@ -1,55 +1,15 @@
 # lyrics
-Lyrics plugin for Powercord, supports searching and the pc-spotify plugin! (Confirmed working at 19/05/19)
+Lyrics plugin for Powercord, supports searching and the ``pc-spotify`` plugin! (Confirmed working at 8th Dec 2020)
+Originally written by ohlookitsderpy, rewritten by spinfish.
 
 Currently contains a ``lyrics`` command which works like this: (replace ``.`` with your Powercord prefix)
 * ``.lyrics`` - Returns lyrics of the currently playing song on Spotify.
-* ``.lyrics imagine dragons warriors`` - Searches for lyrics of given arguments and sends them in chat.
+* ``.lyrics the beatles her majesty`` - Searches for lyrics of given arguments and returns them.
 
-The lyrics will be sent as a message in your current channel. If the message is too large it will send it to you as Clyde instead.
+The lyrics will be shown in an embed as a Clyde message.
 
-Output looks like this:
-```
-Imagine Dragons - Warriors
+Output for ``.lyrics the beatles her majesty`` looks (something) like this:
 
+![image](https://media.discordapp.net/attachments/668999977833463821/786715365069684798/unknown.png)
 
-As a child, you would wait and watch from far away
-But you always knew that you'd be the one
-That work while they all play
-In youth, you'd lay awake at night and scheme
-Of all the things that you would change
-But it was just a dream
-
-
-Here we are, don't turn away now (Don't turn away)
-We are the warriors that built this town (This town)
-Here we are, don't turn away now (Don't turn away)
-We are the warriors that built this town (This town)
-From dust
-
-
-The time will come, when you'll have to rise
-Above the rest and prove yourself
-Your spirit never dies
-Farewell, I've gone to take my throne above
-But don't weep for me, 'cause this will be
-The labor of my love
-
-
-Here we are, don't turn away now (Don't turn away)
-We are the warriors that built this town (This town)
-Here we are, don't turn away now (Don't turn away)
-We are the warriors that built this town (This town)
-From dust
-
-
-
-
-Here we are, don't turn away now (Don't turn away)
-We are the warriors that built this town (This town)
-Here we are, don't turn away now (Don't turn away)
-We are the warriors that built this town (This town)
-From dust
-
-Lyrics provided by KSoft.Si | © Imagine Dragons 2014
-```
 Privacy Notice: I don't track any requests going into ``lyrics-api.powercord.dev``, but you should read the privacy policy for KSoft [here](https://api.ksoft.si/terms-and-privacy). You can also view the code for my server [here](https://github.com/DerpyArchive/lyrics-api).
