@@ -2,7 +2,8 @@ const { get } = require('powercord/http');
 const { Plugin } = require('powercord/entities');
 const { spotifySocket } = require('powercord/webpack');
 
-class Lyrics extends Plugin {
+module.exports = class Lyrics extends Plugin {
+
     startPlugin() {
         powercord.api.commands.registerCommand({
             command: 'lyrics',
@@ -67,7 +68,7 @@ class Lyrics extends Plugin {
             const embed = {
                 type: 'rich',
                 title: `${data.data[0].artist} - ${data.data[0].name}`,
-                color: Math.floor(Math.random() * 16777215),  // random colour
+                color: 0x209cee,
                 description: lyrics,
                 footer: {
                     text: `Lyrics provided by KSoft.Si | © ${data.data[0].artist} ${data.data[0].album_year}`
@@ -88,5 +89,3 @@ class Lyrics extends Plugin {
         }
     }
 };
-
-module.exports = Lyrics;
