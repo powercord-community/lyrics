@@ -3,7 +3,6 @@ const { Plugin } = require('powercord/entities');
 const { spotifySocket } = require('powercord/webpack');
 
 module.exports = class Lyrics extends Plugin {
-
     startPlugin() {
         powercord.api.commands.registerCommand({
             command: 'lyrics',
@@ -19,59 +18,63 @@ module.exports = class Lyrics extends Plugin {
     }
 
     async searchLyrics(args) {
-        // the base URL for searching lyrics
-        const base = 'https://lyrics-api.powercord.dev/lyrics?input=';
+
+        const base = 'https://lyrics-api.powercord.dev/lyrics?input='; // the base URL for searching lyrics
 
         try {
-            // thanks to Harley for this!
-            const playingOnSpotify = spotifySocket.getTrack();
+            const playingOnSpotify = spotifySocket.getTrack(); // thanks to Harley for this!
 
-            // check if there is something playing on Spotify.
-            // if there is, and no args have been provided, assign that
-            // track's name + artist to ``args``
-            if (playingOnSpotify && !args[0]) {
-                args = playingOnSpotify.artists[0].name + " " + playingOnSpotify.name;
-            }
-
-            // there was nothing playing, and no args were provided
+            // no args were provided
             if (!args[0]) {
-                return {
-                    send: false,
-                    result: "I couldn't detect a Spotify status, and you didn't " +
-                            'provide a song to search for!'
-                };
+
+                // Check if there is something playing on Spotify.
+                // If there is, assign that track's artist + name to ``args``
+                if (playingOnSpotify) {
+                    args = `${playingOnSpotify.artists[0].name} ${playingOnSpotify.name}`;
+                } else {
+                    return {
+                        send: false,
+                        result: 'Error: No Spotify status detected and no song to search for provided.'
+                    };
+                }
             }
 
-            // the response body as JSON
-            const data = await get(encodeURI(base + args)).then(res => JSON.parse(res.body));
+            // The response body as JSON
+            // Since it's destructured, instead of calling data.data[0] or data.data[0].length, we can now just call data[0] or data.length
+            // Basically, we're only getting the data array from this await response
+            const { data } = await get(encodeURI(base + args)).then(res => JSON.parse(res.body));
 
-            // response had no ``data`` key, which means the query returned nothing
-            if (!data.data) {
+            // Response had no ``data`` key or data key was empty, which means the query returned nothing
+            if (!data || !data.length) {
                 return {
                     send: false,
-                    result: "I couldn't find that song!"
+                    result: 'Error: Song not found.'
                 };
             }
+            
+            // Destructuring objects for better code readability 
+            let { url, artist, name, album_year, lyrics } = data[0];
 
-            let lyrics;
-
-            // if the lyrics are more than 2000 characters, the embed's description
+            // If the lyrics are more than 2000 characters, the embed's description
             // will simply be a hyperlink to the lyrics
-            if (data.data[0].lyrics.length > 2000) {
-                lyrics = `[Click Here](${data.data[0].url})`;
-            } else {
-                // not sure why this regex is here but yes
-                lyrics = data.data[0].lyrics.replace(/(?:\\[rn])+/g, '');
+            if (lyrics.length > 2000) {
+                lyrics = `[Click Here](${url})`;
+                url = null;
             }
 
-            // builds the embed with our data
+            // Builds the embed with our data
             const embed = {
                 type: 'rich',
-                title: `${data.data[0].artist} - ${data.data[0].name}`,
+                author: {
+                    name: artist
+                },
+                url: url,
+                title: name,
                 color: 0x209cee,
                 description: lyrics,
                 footer: {
-                    text: `Lyrics provided by KSoft.Si | © ${data.data[0].artist} ${data.data[0].album_year}`
+                    icon_url: 'https://cdn.ksoft.si/images/Logo128.png',
+                    text: `Lyrics provided by KSoft.Si | © ${artist} ${album_year.split(',')[0]}` // avoid having 100 million different album years
                 }
             };
 
@@ -84,7 +87,7 @@ module.exports = class Lyrics extends Plugin {
             console.error('Error with lyrics plugin:', e);
             return {
                 send: false,
-                result: 'Yikes, something broke. Please check the Dev Console for info.'
+                result: 'Error: Something broke. Please check the Developer Console for information.'
             };
         }
     }
