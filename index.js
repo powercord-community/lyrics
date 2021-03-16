@@ -30,7 +30,7 @@ module.exports = class Lyrics extends Plugin {
             // if there is, and no args have been provided, assign that
             // track's name + artist to ``args``
             if (playingOnSpotify && !args[0]) {
-                args = playingOnSpotify.name + playingOnSpotify.artists[0].name;
+                args = playingOnSpotify.artists[0].name + " " + playingOnSpotify.name;
             }
 
             // there was nothing playing, and no args were provided
