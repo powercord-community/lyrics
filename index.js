@@ -3,7 +3,6 @@ const { Plugin } = require('powercord/entities');
 const { spotifySocket } = require('powercord/webpack');
 
 module.exports = class Lyrics extends Plugin {
-
     startPlugin() {
         powercord.api.commands.registerCommand({
             command: 'lyrics',
@@ -19,26 +18,23 @@ module.exports = class Lyrics extends Plugin {
     }
 
     async searchLyrics(args) {
-        // the base URL for searching lyrics
-        const base = 'https://lyrics-api.powercord.dev/lyrics?input=';
+        const base = 'https://lyrics-api.powercord.dev/lyrics?input='; // the base URL for searching lyrics
 
         try {
-            // thanks to Harley for this!
-            const playingOnSpotify = spotifySocket.getTrack();
+            const playingOnSpotify = spotifySocket.getTrack(); // thanks to Harley for this!
 
             // check if there is something playing on Spotify.
             // if there is, and no args have been provided, assign that
             // track's name + artist to ``args``
             if (playingOnSpotify && !args[0]) {
-                args = playingOnSpotify.artists[0].name + " " + playingOnSpotify.name;
+                args = `${playingOnSpotify.artists[0].name} ${playingOnSpotify.name}`;
             }
 
             // there was nothing playing, and no args were provided
             if (!args[0]) {
                 return {
                     send: false,
-                    result: "I couldn't detect a Spotify status, and you didn't " +
-                            'provide a song to search for!'
+                    result: 'Error: No Spotify status detected and no song to search for provided.'
                 };
             }
 
@@ -49,16 +45,18 @@ module.exports = class Lyrics extends Plugin {
             if (!data.data) {
                 return {
                     send: false,
-                    result: "I couldn't find that song!"
+                    result: 'Error: Song not found.'
                 };
             }
 
             let lyrics;
+            let url = data.data[0].url; // it looks better if we don't have duplicate hyperlinks in my opinion
 
             // if the lyrics are more than 2000 characters, the embed's description
             // will simply be a hyperlink to the lyrics
             if (data.data[0].lyrics.length > 2000) {
                 lyrics = `[Click Here](${data.data[0].url})`;
+                url = null;
             } else {
                 // not sure why this regex is here but yes
                 lyrics = data.data[0].lyrics.replace(/(?:\\[rn])+/g, '');
@@ -67,11 +65,16 @@ module.exports = class Lyrics extends Plugin {
             // builds the embed with our data
             const embed = {
                 type: 'rich',
-                title: `${data.data[0].artist} - ${data.data[0].name}`,
+                author: {
+                    name: data.data[0].artist
+                },
+                url: url,
+                title: data.data[0].name,
                 color: 0x209cee,
                 description: lyrics,
                 footer: {
-                    text: `Lyrics provided by KSoft.Si | © ${data.data[0].artist} ${data.data[0].album_year}`
+                    icon_url: 'https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png',
+                    text: `Lyrics provided by KSoft.Si | © ${data.data[0].artist} ${data.data[0].album_year.split(',')[0]}` // avoid having 100 million different album years
                 }
             };
 
@@ -84,7 +87,7 @@ module.exports = class Lyrics extends Plugin {
             console.error('Error with lyrics plugin:', e);
             return {
                 send: false,
-                result: 'Yikes, something broke. Please check the Dev Console for info.'
+                result: 'Error: Something broke. Please check the Developer Console for information.'
             };
         }
     }
