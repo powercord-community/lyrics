@@ -43,7 +43,7 @@ module.exports = class Lyrics extends Plugin {
             }
 
             // the response body as JSON
-            const data = await get(base + args).then(res => JSON.parse(res.body));
+            const data = await get(encodeURI(base + args)).then(res => JSON.parse(res.body));
 
             // response had no ``data`` key, which means the query returned nothing
             if (!data.data) {
