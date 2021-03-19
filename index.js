@@ -55,9 +55,9 @@ module.exports = class Lyrics extends Plugin {
             // Destructuring objects for better code readability 
             let { url, artist, name, album_year, lyrics } = data[0];
 
-            // If the lyrics are more than 2000 characters, the embed's description
+            // If the lyrics are more than 2048 characters, the embed's description
             // will simply be a hyperlink to the lyrics
-            if (lyrics.length > 2000) {
+            if (lyrics.length > 2048) {
                 lyrics = `[Click Here](${url})`;
                 url = null;
             }
