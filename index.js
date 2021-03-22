@@ -73,7 +73,7 @@ module.exports = class Lyrics extends Plugin {
                 color: 0x209cee,
                 description: lyrics,
                 footer: {
-                    icon_url: 'https://cdn.ksoft.si/images/Logo128.png',
+                    icon_url: 'https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png',
                     text: `Lyrics provided by KSoft.Si | © ${artist} ${album_year.split(',')[0]}` // avoid having 100 million different album years
                 }
             };
