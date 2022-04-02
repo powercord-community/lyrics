@@ -18,15 +18,12 @@ module.exports = class Lyrics extends Plugin {
     }
 
     async searchLyrics(args) {
-
-        const base = 'https://lyrics-api.powercord.dev/lyrics?input='; // the base URL for searching lyrics
+        const base = 'https://some-random-api.ml/lyrics?title=';
 
         try {
             const playingOnSpotify = spotifySocket.getTrack(); // thanks to Harley for this!
 
-            // no args were provided
             if (!args[0]) {
-
                 // Check if there is something playing on Spotify.
                 // If there is, assign that track's artist + name to ``args``
                 if (playingOnSpotify) {
@@ -39,42 +36,37 @@ module.exports = class Lyrics extends Plugin {
                 }
             }
 
-            // The response body as JSON
-            // Since it's destructured, instead of calling data.data[0] or data.data[0].length, we can now just call data[0] or data.length
-            // Basically, we're only getting the data array from this await response
-            const { data } = await get(encodeURI(base + args)).then(res => JSON.parse(res.body));
+            let data;
+            await get(encodeURI(base + args)).then(res => data = res.body);
 
-            // Response had no ``data`` key or data key was empty, which means the query returned nothing
-            if (!data || !data.length) {
+            if (!data || data.error) {
                 return {
                     send: false,
                     result: 'Error: Song not found.'
                 };
             }
             
-            // Destructuring objects for better code readability 
-            let { url, artist, name, album_year, lyrics } = data[0];
+            let { links, author, title, lyrics } = data;
 
             // If the lyrics are more than 2048 characters, the embed's description
             // will simply be a hyperlink to the lyrics
             if (lyrics.length > 2048) {
-                lyrics = `[Click Here](${url})`;
-                url = null;
+                lyrics = `[Click Here](${links.genius})`;
+                links.genius = null;
             }
 
-            // Builds the embed with our data
             const embed = {
                 type: 'rich',
                 author: {
-                    name: artist
+                    name: author
                 },
-                url: url,
-                title: name,
+                url: links.genius,
+                title: title,
                 color: 0x209cee,
                 description: lyrics,
                 footer: {
-                    icon_url: 'https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png',
-                    text: `Lyrics provided by KSoft.Si | © ${artist} ${album_year.split(',')[0]}` // avoid having 100 million different album years
+                    icon_url: 'https://i.some-random-api.ml/logo.png',
+                    text: `Lyrics provided by Some Random API | © ${author}`
                 }
             };
 
@@ -82,7 +74,6 @@ module.exports = class Lyrics extends Plugin {
                 send: false,
                 result: embed
             };
-
         } catch (e) {
             console.error('Error with lyrics plugin:', e);
             return {
